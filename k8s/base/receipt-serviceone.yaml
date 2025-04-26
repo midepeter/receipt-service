@@ -91,7 +91,7 @@ spec:
                 name: environment-config
             - configMapRef:
                 name: ledger-db-config
-          image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:latest
+          image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:placeholder
           livenessProbe:
             httpGet:
               path: /healthy
