@@ -15,15 +15,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: balancereader
+  name: receipt-service
 spec:
   selector:
     matchLabels:
-      app: balancereader
+      app: receipt-service
   template:
     metadata:
       labels:
-        app: balancereader
+        app: receipt-service
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -33,7 +33,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       containers:
-      - name: balancereader
+      - name: receipt-service
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: balancereader
+        image: receipt-service
         env:
         - name: VERSION
           value: "dev"
@@ -105,11 +105,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: balancereader
+  name: receipt-service
 spec:
   type: ClusterIP
   selector:
-    app: balancereader
+    app: receipt-service
   ports:
   - name: http
     port: 8080

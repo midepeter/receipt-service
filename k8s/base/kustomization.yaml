@@ -15,7 +15,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - balancereader.yaml
+  - receipt-service.yaml
 components:
   - ../../../components/ledger
   - ../../../components/ledger-backend-service

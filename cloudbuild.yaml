@@ -28,7 +28,7 @@ steps:
     args:
       - 'set'
       - 'image'
-      - 'deployment/receipt-service
+      - 'deployment/receipt-service'
       - 'receipt-service=us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
       - '--namespace=group4-ns'
     env:

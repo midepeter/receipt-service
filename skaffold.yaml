@@ -15,7 +15,7 @@
 apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
-  name: balancereader
+  name: receipt-service
 requires:
 - configs:
   - e2e-tests
@@ -25,25 +25,25 @@ requires:
   path: ../ledger-db/skaffold.yaml
 build:
   artifacts:
-  - image: balancereader
+  - image: receipt-service
     context: ../../../
     jib:
-      project: src/ledger/balancereader
+      project: src/ledger/receipt-service
       type: maven
   tagPolicy:
     sha256: {}
 test:
-  - image: balancereader # code style
+  - image: receipt-service # code style
     context: .
     custom:
       - command: ../../../mvnw checkstyle:check
         timeoutSeconds: 1200
-  - image: balancereader # unit tests
+  - image: receipt-service # unit tests
     context: .
     custom:
       - command: ../../../mvnw test
         timeoutSeconds: 1200
-  - image: balancereader # code coverage
+  - image: receipt-service # code coverage
     context: .
     custom:
       - command: |
