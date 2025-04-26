@@ -33,7 +33,7 @@ spec:
     environment: development
     team: ledger
     tier: backend
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -91,7 +91,7 @@ spec:
                 name: environment-config
             - configMapRef:
                 name: ledger-db-config
-          image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:placeholder
+          image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:latest
           livenessProbe:
             httpGet:
               path: /healthy

@@ -8,13 +8,13 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:latest'
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:latest'
 
   # Kubernetes setup
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -29,7 +29,7 @@ steps:
       - 'set'
       - 'image'
       - 'deployment/receipt-service'
-      - 'receipt-service=us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+      - 'receipt-service=us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:latest'
       - '--namespace=group4-ns'
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
@@ -37,7 +37,7 @@ steps:
 
 
 images:
-  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:latest'
 
 
 options:
