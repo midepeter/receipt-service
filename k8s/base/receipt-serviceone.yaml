@@ -18,7 +18,7 @@ metadata:
   labels:
     application: bank-of-anthos
     environment: development
-    team: ledger
+    team: receipt
     tier: backend
   name: receipt-service
   namespace: group4-ns
@@ -31,7 +31,7 @@ spec:
     app: receipt-service
     application: bank-of-anthos
     environment: development
-    team: ledger
+    team: receipt
     tier: backend
   type: LoadBalancer
 ---
@@ -41,7 +41,7 @@ metadata:
   labels:
     application: bank-of-anthos
     environment: development
-    team: ledger
+    team: receipt
     tier: backend
   name: receipt-service
   namespace: group4-ns
@@ -51,103 +51,21 @@ spec:
       app: receipt-service
       application: bank-of-anthos
       environment: development
-      team: ledger
+      team: receipt
       tier: backend
   template:
     metadata:
-      annotations:
-        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       labels:
         app: receipt-service
         application: bank-of-anthos
         environment: development
-        team: ledger
+        team: receipt
         tier: backend
     spec:
       containers:
-        - env:
-            - name: VERSION
-              value: v0.6.6
-            - name: PORT
-              value: "4000"
-            - name: ENABLE_TRACING
-              value: "true"
-            - name: ENABLE_METRICS
-              value: "true"
-            - name: POLL_MS
-              value: "100"
-            - name: CACHE_SIZE
-              value: "1000000"
-            - name: JVM_OPTS
-              value: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Xms256m -Xmx512m
-            - name: LOG_LEVEL
-              value: info
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          envFrom:
-            - configMapRef:
-                name: environment-config
-            - configMapRef:
-                name: ledger-db-config
+        - name: receipt-service
           image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:placeholder
-          livenessProbe:
-            httpGet:
-              path: /healthy
-              port: 4000
-            initialDelaySeconds: 120
-            periodSeconds: 5
-            timeoutSeconds: 10
-          name: receipt-service
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 4000
-            initialDelaySeconds: 60
-            periodSeconds: 5
-            timeoutSeconds: 10
-          resources:
-            limits:
-              cpu: 500m
-              ephemeral-storage: 0.5Gi
-              memory: 512Mi
-            requests:
-              cpu: 100m
-              ephemeral-storage: 0.5Gi
-              memory: 256Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - all
-            privileged: false
-            readOnlyRootFilesystem: true
-          startupProbe:
-            failureThreshold: 30
-            httpGet:
-              path: /healthy
-              port: 4000
-            periodSeconds: 10
-          volumeMounts:
-            - mountPath: /tmp
-              name: tmp
-            - mountPath: /tmp/.ssh
-              name: publickey
-              readOnly: true
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-      serviceAccountName: bank-of-anthos
-      terminationGracePeriodSeconds: 5
-      volumes:
-        - emptyDir: {}
-          name: tmp
-        - name: publickey
-          secret:
-            items:
-              - key: jwtRS256.key.pub
-                path: publickey
-            secretName: jwt-key
+          ports:
+            - containerPort: 4000
+      serviceAccountName: default
+
