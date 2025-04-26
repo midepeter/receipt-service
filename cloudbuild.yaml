@@ -1,7 +1,7 @@
 steps:
-  # Maven build
-  - name: 'maven:3.9.6-eclipse-temurin-21'
-    args: ['mvn', 'clean', 'package', '-DskipTests']
+  # Golang build
+  - name: 'gcr.io/cloud-builders/go'
+    args: ['build', '-o', 'receipt-service', '.']
 
   # Docker build and push
   - name: 'gcr.io/cloud-builders/docker'
