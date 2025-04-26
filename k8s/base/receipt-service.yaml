@@ -46,7 +46,7 @@ spec:
         - name: VERSION
           value: "dev"
         - name: PORT
-          value: "8080"
+          value: "4000"
         # toggle Cloud Trace export
         - name: ENABLE_TRACING
           value: "true"
@@ -84,21 +84,21 @@ spec:
         readinessProbe:
           httpGet:
             path: /ready
-            port: 8080
+            port: 4000
           initialDelaySeconds: 60
           periodSeconds: 5
           timeoutSeconds: 10
         livenessProbe:
           httpGet:
             path: /healthy
-            port: 8080
+            port: 4000
           initialDelaySeconds: 120
           periodSeconds: 5
           timeoutSeconds: 10
         startupProbe:
           httpGet:
             path: /healthy
-            port: 8080
+            port: 4000
           failureThreshold: 30
           periodSeconds: 10
 ---
@@ -112,5 +112,5 @@ spec:
     app: receipt-service
   ports:
   - name: http
-    port: 8080
-    targetPort: 8080
+    port: 4000
+    targetPort: 4000

@@ -9,5 +9,5 @@ RUN go build -o receipt-service
 FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/receipt-service .
-EXPOSE 8080
+EXPOSE 4000
 ENTRYPOINT ["./receipt-service"]
