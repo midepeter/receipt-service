@@ -1,0 +1,44 @@
+steps:
+  # Maven build
+  - name: 'maven:3.9.6-eclipse-temurin-21'
+    args: ['mvn', 'clean', 'package', '-DskipTests']
+
+  # Docker build and push
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+
+  # Kubernetes setup
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/base/receipt-serviceone.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=group4-cluster'
+
+  # Update deployment with the new image
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'set'
+      - 'image'
+      - 'deployment/receipt-service
+      - 'receipt-service=us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+      - '--namespace=group4-ns'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=group4-cluster'
+
+
+images:
+  - 'us-central1-docker.pkg.dev/${PROJECT_ID}/group4-repo/receipt-service:${SHORT_SHA}'
+
+
+options:
+  logging: CLOUD_LOGGING_ONLY
