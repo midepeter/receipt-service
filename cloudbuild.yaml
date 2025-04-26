@@ -1,7 +1,7 @@
 steps:
   # Golang build
-  - name: 'gcr.io/cloud-builders/go'
-    args: ['build', '-o', 'receipt-service', '.']
+  # - name: 'gcr.io/cloud-builders/go'
+  #   args: ['build', '-o', 'receipt-service', '.']
 
   # Docker build and push
   - name: 'gcr.io/cloud-builders/docker'
