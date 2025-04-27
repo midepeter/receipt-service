@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	TransactionReceiptTemplateFile string = "./templates/receiptnewtwo.html"
-	TransactionSummaryTemplateFile string = "./templates/transaction-history-new.html"
+	TransactionReceiptTemplateFile string = "receiptnewtwo.html"
+	TransactionSummaryTemplateFile string = "transaction-history-new.html"
 	TransactionReceipt             string = "transaction_receipt.pdf"
 	TransactionSummary             string = "transaction_summary_receipt.pdf"
 )
