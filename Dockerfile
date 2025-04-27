@@ -9,5 +9,8 @@ RUN go build -o receipt-service
 FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/receipt-service .
-EXPOSE 4000
+COPY --from=builder /app/templates/receiptnewtwo.html .
+COPY --from=builder /app/templates/transaction-history-new.html .
+
+EXPOSE 4002
 ENTRYPOINT ["./receipt-service"]

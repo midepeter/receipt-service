@@ -18,7 +18,7 @@ type Server struct {
 
 func NewServer(userDB *Database, transactionDB *Database, log *slog.Logger) *Server {
 	return &Server{
-		PORT:          "4000",
+		PORT:          "4002",
 		ADDRESS:       "localhost",
 		UsersDB:       userDB,
 		TransactionDB: transactionDB,

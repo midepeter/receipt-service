@@ -25,8 +25,8 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 4000
-      targetPort: 4000
+      port: 4002
+      targetPort: 4002
   selector:
     app: receipt-service
     application: bank-of-anthos
@@ -66,6 +66,6 @@ spec:
         - name: receipt-service
           image: us-central1-docker.pkg.dev/dreamdev-team4/group4-repo/receipt-service:placeholder
           ports:
-            - containerPort: 4000
+            - containerPort: 4002
       serviceAccountName: default
 
