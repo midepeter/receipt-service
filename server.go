@@ -59,9 +59,21 @@ func (s *Server) Shutdown() {
 }
 
 func setupHTTPServer(logger *slog.Logger, port string, srv *Server) (*http.Server, error) {
+	handler := srv.router()
+	corsHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		handler.ServeHTTP(w, r)
+	})
+
 	return &http.Server{
 		Addr:         fmt.Sprintf(":%s", port),
-		Handler:      srv.router(),
+		Handler:      corsHandler,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
 		IdleTimeout:  60 * time.Second,
