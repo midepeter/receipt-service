@@ -7,6 +7,12 @@ RUN go build -o receipt-service
 
 # === Runtime Stage ===
 FROM alpine:latest
+
+
+RUN apk add --no-cache \
+    wkhtmltopdf \
+    xvfb-run
+    
 WORKDIR /app
 COPY --from=builder /app/receipt-service .
 COPY --from=builder /app/templates/receiptnewtwo.html .
