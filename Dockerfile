@@ -6,13 +6,11 @@ RUN go mod download
 RUN go build -o receipt-service
 
 # === Runtime Stage ===
-FROM alpine:latest
+FROM ubuntu:20.04
 
+RUN apt-get update && \
+    apt-get install -y wkhtmltopdf
 
-RUN apk add --no-cache \
-    wkhtmltopdf \
-    xvfb-run
-    
 WORKDIR /app
 COPY --from=builder /app/receipt-service .
 COPY --from=builder /app/templates/receiptnewtwo.html .
