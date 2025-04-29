@@ -46,7 +46,7 @@ func (s *Server) getTransactionReceipt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := ReceiptTemplateData{
-		Amount:          fmt.Sprintf("%.2f", transaction.Amount), // Format to 2 decimal places, full amount
+		Amount:          fmt.Sprintf("%.2f", transaction.Amount/100), // Format to 2 decimal places, full amount
 		FromAccount:     lastFourDigits(transaction.FromAccountNumber),
 		Recipient:       user.FirstName + " " + user.LastName,
 		ToAccount:       lastFourDigits(transaction.ToAccountNumber),
@@ -144,20 +144,21 @@ func (s *Server) getTransactionSummary(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for k, v := range transactions {
+		amount := v.Amount / 100
 		transactions[k].TransactionDateString = v.TransactionDate.Format("2006-01-02 15:04:05")
 		transactions[k].Reference = uniuri.NewLen(10)
-		transactions[k].Amountstring = fmt.Sprintf("%.2f", v.Amount)
+		transactions[k].Amountstring = fmt.Sprintf("%.2f", amount)
 		if v.FromAccountNumber == req.AccountID {
 			transactions[k].Type = "Debit"
-			transactions[k].Balance = -v.Amount
+			transactions[k].Balance = -amount
 			if k != 0 {
-				transactions[k].Balance = transactions[k-1].Balance - v.Amount
+				transactions[k].Balance = transactions[k-1].Balance - amount
 			}
 		} else {
 			transactions[k].Type = "Credit"
-			transactions[k].Balance = v.Amount
+			transactions[k].Balance = amount
 			if k != 0 {
-				transactions[k].Balance = transactions[k-1].Balance + v.Amount
+				transactions[k].Balance = transactions[k-1].Balance + amount
 			}
 		}
 
@@ -170,6 +171,9 @@ func (s *Server) getTransactionSummary(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("Failed to compile template: %v", err)
 	}
+
+
+	log.Println("PDF generated successfully for transaction summary.")
 
 	if err := GeneratePDF(html, TransactionSummary); err != nil {
 		log.Fatalf("Failed to generate PDF: %v", err)
