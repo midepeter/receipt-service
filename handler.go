@@ -39,7 +39,7 @@ func (s *Server) getTransactionReceipt(w http.ResponseWriter, r *http.Request) {
 	err = s.UsersDB.DBPool.QueryRow(context.Background(), `
 		SELECT firstname, lastname
 		FROM users
-		WHERE accountid = $1`, transaction.FromAccountNumber).Scan(&user.FirstName, &user.LastName)
+		WHERE accountid IN ($1, $2)`, transaction.FromAccountNumber, transaction.ToAccountNumber).Scan(&user.FirstName, &user.LastName)
 	if err != nil && err != pgx.ErrNoRows {
 		http.Error(w, "Failed to fetch user details", http.StatusInternalServerError)
 		return
@@ -171,7 +171,6 @@ func (s *Server) getTransactionSummary(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalf("Failed to compile template: %v", err)
 	}
-
 
 	log.Println("PDF generated successfully for transaction summary.")
 
